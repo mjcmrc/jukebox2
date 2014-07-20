@@ -66,8 +66,12 @@ module Jockey
       return halt 400 unless params[:id]
 
       songs = params[:id].split(/,/).map{|x| Song.find(x) }.compact
-      Queue.enque(*songs)
-
+      code =Queue.enque(*songs)
+      puts code
+      if code == 123
+        print "uh already voted cannot vote `-`"
+        return {code:123, done:false}.to_json
+      end
       {done: true}.to_json
     end
   end

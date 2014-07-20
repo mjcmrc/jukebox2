@@ -1,13 +1,17 @@
 # coding: utf-8
 
 require 'sinatra'
+require 'sinatra/content_for'
 require_relative '../models/player'
 require_relative '../models/queue'
 
 module Jockey
   class App < Sinatra::Base
+    helpers Sinatra::ContentFor
+    
     get '/' do
-      haml_pjax :songs, layout: :layout, locals: {songs: Queue.upcoming}
+      haml_pjax :index, layout: :layout
+      #haml_pjax :songs, layout: :layout, locals: {songs: Queue.upcoming}
     end
 
     get '/history' do
@@ -45,8 +49,11 @@ module Jockey
 
     get '/enque/:id' do
       songs = params[:id].split(/,/).map{|x| Song.find(x) }.compact
-      Queue.enque(*songs)
-
+      code =Queue.enque(*songs)
+      puts code
+      if code == 123
+        print "uh already voted cannot vote `-`"
+      end
       redirect '/'
     end
   end

@@ -26,7 +26,9 @@ module Jockey
 
         @offset
       end
-
+      
+      
+      
       # "enque", it's named enque but it doesn't add to the last!
       def enque(*songs)
         # do like this: http://hints.macworld.com/article.php?story=20040830035448525
@@ -46,8 +48,21 @@ module Jockey
           size = playlist.tracks.get.size
 
           exists = playlist.tracks[Appscript.its.index.gt(offset).and(Appscript.its.index.le(size))]
-
+          
+          #wow = playlist.tracks[Appscript.its.index.gt(offset)].get.map{|x| Song.find(x) }
+          #puts wow
           songs.each do |song|
+            #puts exists[Appscript.its.persistent_ID.eq(song.id)]
+            queued = playlist.tracks[
+             Appscript.its.persistent_ID.eq(song.persistent_ID.get)
+           ].get.size
+           puts queued
+            if queued == 1
+              print "song already exists"
+              return 123
+            else
+              print "song now wow"
+            end
             song.duplicate to: playlist
           end
           exists.duplicate to: playlist
@@ -57,6 +72,7 @@ module Jockey
             playlist.delete playlist.tracks[Appscript.its.persistent_ID.eq(song.persistent_ID.get).and(Appscript.its.index.gt(offset+songs.size))]
           end
         end
+        return 0
       end
 
       def history

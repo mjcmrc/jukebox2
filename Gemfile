@@ -19,6 +19,7 @@ end
 gem "rb-appscript"
 
 gem "sinatra"
+gem "sinatra-contrib"
 gem "thin"
 
 gem "sprockets"
