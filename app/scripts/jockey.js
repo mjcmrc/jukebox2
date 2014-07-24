@@ -34,7 +34,29 @@
           id: $(this).data('song')
         }, function(data) {
 			console.log(data);
-			return $(link).text("✔").attr('href', null);
+			if (data.done == false) {
+				console.log("omg no!?!");
+				switch (data.code) {
+				case 123:
+					alert('This song is already queued! Please choose another :(');
+					break;
+				}
+			}
+			else {
+				var msg = prompt("Your dedication (140 characters max.)", "Hello I like this song very much");
+				    if (msg != null) {
+				        console.log("the msg " + msg);
+						$.post('/api/dedicate', {
+						          id: $(this).data('song'),
+								  message: msg
+						        }, function(data) {
+									console.log("dedicate pls");
+									console.log(data);
+								}
+				    }
+				return $(link).text("✔").attr('href', null);
+			}
+			
         });
       });
       return loading(false);

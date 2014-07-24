@@ -4,6 +4,7 @@ require 'sinatra'
 require 'json'
 require_relative '../models/player'
 require_relative '../models/queue'
+require 'redis'
 
 module Jockey
   class App < Sinatra::Base
@@ -74,5 +75,13 @@ module Jockey
       end
       {done: true}.to_json
     end
+    post '/api/dedicate', provides :json do
+      return halt 400 unless params[:id].blank? && params[:message].blank?
+      print "hello message" + params[:message].to_s
+      songs = params[:id].split(/,/).map{|x| Song.find(x) }.compact
+      r = Redis.new
+      r.hmset('msg:' + song.id, params[:message].to_s)
+      r.quit
+      {done: true}.to_json
   end
 end
