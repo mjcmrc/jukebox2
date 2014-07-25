@@ -1,0 +1,27 @@
+!!! 5
+%html
+	%head
+		%meta{charset: "UTF-8"}
+		%meta{name: "viewport", content: "width=device-width"}
+		%link{rel: 'stylesheet', href: '/styles/jockey.css', type: 'text/css'}
+		%link{rel: 'stylesheet', href: '/styles/dj.css', type: 'text/css'}
+		
+		%script{src: '/scripts/jquery.min.js'}
+		%script{src: "/scripts/jockey.js"}
+		%script{src: '/scripts/jquery.pjax.js'}
+		%title DJ 
+	%body
+		
+		%div#container
+			%h4 NOW PLAYING
+			%section#playing
+				= haml :song, layout: false, locals: {song: Jockey::Player.playing}
+			%h4 MESSAGE
+			%section#playing
+				%div#message
+					Hello?!
+		
+		%div#search_container
+			%h4 UPCOMING
+			%section.wow#potato
+				= haml :songs, layout: false, locals: {songs: Jockey::Queue.upcoming}

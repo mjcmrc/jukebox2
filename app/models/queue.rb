@@ -64,13 +64,14 @@ module Jockey
               print "song now wow"
             end
             song.duplicate to: playlist
+            #song.record.duplicate to: playlist
           end
-          exists.duplicate to: playlist
+          #exists.duplicate to: playlist
 
-          playlist.delete exists
-          songs.each do |song|
-            playlist.delete playlist.tracks[Appscript.its.persistent_ID.eq(song.persistent_ID.get).and(Appscript.its.index.gt(offset+songs.size))]
-          end
+          #playlist.delete exists
+          #songs.each do |song|
+          #  playlist.delete playlist.tracks[Appscript.its.persistent_ID.eq(song.persistent_ID.get).and(Appscript.its.index.gt(offset+songs.size))]
+          #end
         end
         return 0
       end

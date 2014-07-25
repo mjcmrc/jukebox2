@@ -1,4 +1,5 @@
 require 'appscript'
+require 'redis'
 require_relative './player'
 
 module Jockey
@@ -49,7 +50,18 @@ module Jockey
     end
 
     def to_hash
+      print "\n\nthe hash yay\n\n"
       {id: @id, name: @name, artist: @artist, album: @album, album_artist: @album_artist, rating: rating, played: played}
+    end
+    
+    def dedicate_hash
+      r = Redis.new
+      dedicate = r.get('msg:' + @id)
+      if dedicate == nil
+        print "no dedication huh"
+        return {id: @id, name: @name, artist: @artist, album: @album, album_artist: @album_artist, rating: rating, played: played, dedication: ""}
+      end
+      {id: @id, name: @name, artist: @artist, album: @album, album_artist: @album_artist, rating: rating, played: played, dedication: dedicate}
     end
 
     def inspect

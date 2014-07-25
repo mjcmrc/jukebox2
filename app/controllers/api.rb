@@ -75,13 +75,18 @@ module Jockey
       end
       {done: true}.to_json
     end
-    post '/api/dedicate', provides :json do
-      return halt 400 unless params[:id].blank? && params[:message].blank?
+    
+    post '/api/dedicate', provides: :json do
+      return halt 400 unless params[:id] && params[:message]
       print "hello message" + params[:message].to_s
-      songs = params[:id].split(/,/).map{|x| Song.find(x) }.compact
+      song = Song.find(params[:id])
+      #songs = params[:id].split(/,/).map{|x| Song.find(x) }.compact
       r = Redis.new
-      r.hmset('msg:' + song.id, params[:message].to_s)
+      r.set('msg:' + song.id, params[:message].to_s)
       r.quit
       {done: true}.to_json
-  end
+    end
+    
+   # post '/api/dedicate', provides :json do
+ end
 end

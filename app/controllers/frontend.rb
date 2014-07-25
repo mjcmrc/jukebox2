@@ -13,6 +13,10 @@ module Jockey
       haml_pjax :index, layout: :layout
       #haml_pjax :songs, layout: :layout, locals: {songs: Queue.upcoming}
     end
+    
+    get '/dj' do
+      haml_pjax :dj, layout: false
+    end
 
     get '/history' do
       haml_pjax :songs, layout: :layout, locals: {songs: Queue.history}

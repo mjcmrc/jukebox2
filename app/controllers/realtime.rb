@@ -26,15 +26,6 @@ module Jockey
         last_history = nil
         begin
           loop do
-            if last_playing != (playing = Player.playing)
-              out.call "event: playing\n"
-              out.call "data: #{playing.to_hash.to_json}\n\n"
-              html.call "event: playing\n"
-              html.call "data: #{{html: haml(:song, layout: false, locals: {song: playing})}.to_json}\n\n"
-
-              last_playing = playing
-            end
-
             if last_upcoming != (upcoming = Queue.upcoming)
               out.call "event: upcoming\n"
               out.call "data: #{upcoming.map(&:to_hash).to_json}\n\n"
@@ -53,6 +44,20 @@ module Jockey
 
 
               last_history = history
+            end
+            
+            if last_playing != (playing = Player.playing)
+              out.call "event: playing\n"
+              out.call "data: #{playing.to_hash.to_json}\n\n"
+              print "dedicate-data: #{playing.dedicate_hash.to_json}\n\n"
+              #out.call "dedicate: "
+              html.call "event: playing\n"
+              html.call "data: #{{html: haml(:song, layout: false, locals: {song: playing})}.to_json}\n\n"
+              html.call "event: dedicate\n"
+              html.call "data:  #{playing.dedicate_hash.to_json}\n\n"
+              last_playing = playing
+              print "new song wow!"
+              Player.pause
             end
 
             out.call "event: ping\ndata: {\"type\": \"ping\"}\n\n"
